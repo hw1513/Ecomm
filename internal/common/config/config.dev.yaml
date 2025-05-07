@@ -1,0 +1,19 @@
+order:
+  service_name: "order"
+  server_to_run: "order"
+  http_addr: ":8081"
+
+kitchen:
+  service_name: "kitchen"
+  server_to_run: "kitchen"
+  http_addr: ":8082"
+
+payment:
+  service_name: "payment"
+  server_to_run: "payment"
+  http_addr: ":8083"
+
+stock:
+  service_name: "stock"
+  server_to_run: "stock"
+  http_addr: ":8084"

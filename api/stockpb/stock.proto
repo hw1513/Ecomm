@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package stockpb;
+
+option go_package = "github.com/hw1513/ecomm/common/genproto/stockpb;stockpb";
+
+import "google/protobuf/timestamp.proto";
+import "orderpb/order.proto";
+
+// Stock represents the current stock level of a product
+message Stock {
+  string product_id = 1;
+  int32 quantity = 2;
+  google.protobuf.Timestamp updated_at = 3;
+}
+
+// StockOperation represents a stock operation type
+enum StockOperation {
+  STOCK_OPERATION_UNSPECIFIED = 0;
+  STOCK_OPERATION_DEDUCT = 1;    // Deduct stock (e.g., when order is created)
+  STOCK_OPERATION_RESTORE = 2;   // Restore stock (e.g., when order is cancelled)
+}
+
+// CheckStockRequest represents a request to check stock availability
+message CheckStockRequest {
+  repeated orderpb.OrderItem items = 1;  // Check stock for multiple items in an order
+}
+
+// CheckStockResponse represents a response to checking stock availability
+message CheckStockResponse {
+  bool is_available = 1;
+  repeated StockStatus item_status = 2;
+}
+
+// StockStatus represents the stock status for a specific product
+message StockStatus {
+  string product_id = 1;
+  bool is_available = 2;
+  int32 available_quantity = 3;
+  int32 required_quantity = 4;
+}
+
+// UpdateStockRequest represents a request to update stock
+message UpdateStockRequest {
+  string order_id = 1;  // Reference to the order
+  orderpb.OrderStatus order_status = 2;  // Current order status
+  repeated orderpb.OrderItem items = 3;  // Items to update stock for
+  StockOperation operation = 4;
+}
+
+// UpdateStockResponse represents a response to updating stock
+message UpdateStockResponse {
+  repeated Stock updated_stocks = 1;
+}
+
+// GetStockRequest represents a request to get stock by product ID
+message GetStockRequest {
+  string product_id = 1;
+}
+
+// GetStockResponse represents a response to getting stock
+message GetStockResponse {
+  Stock stock = 1;
+}
+
+// StockService provides methods for managing stock
+service StockService {
+  // CheckStock checks if there is enough stock for all items in an order
+  rpc CheckStock(CheckStockRequest) returns (CheckStockResponse);
+  
+  // UpdateStock updates the stock level based on order status changes
+  rpc UpdateStock(UpdateStockRequest) returns (UpdateStockResponse);
+  
+  // GetStock retrieves the current stock level of a product
+  rpc GetStock(GetStockRequest) returns (GetStockResponse);
+} 

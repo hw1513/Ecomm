@@ -8,10 +8,11 @@ import (
 
 // Config 应用配置结构体
 type Config struct {
-	Order   ServiceConfig `mapstructure:"order"`
-	Kitchen ServiceConfig `mapstructure:"kitchen"`
-	Payment ServiceConfig `mapstructure:"payment"`
-	Stock   ServiceConfig `mapstructure:"stock"`
+	Order            ServiceConfig `mapstructure:"order"`
+	Kitchen          ServiceConfig `mapstructure:"kitchen"`
+	Payment          ServiceConfig `mapstructure:"payment"`
+	Stock            ServiceConfig `mapstructure:"stock"`
+	FallbackGRPCAddr string        `mapstructure:"fallback-grpc-addr"`
 }
 
 // ServiceConfig 服务配置
@@ -19,6 +20,7 @@ type ServiceConfig struct {
 	ServiceName string `mapstructure:"service_name"`
 	ServerToRun string `mapstructure:"server_to_run"`
 	HTTPAddr    string `mapstructure:"http_addr"`
+	GRPCAddr    string `mapstructure:"grpc_addr"`
 }
 
 // LoadConfig 加载配置文件
